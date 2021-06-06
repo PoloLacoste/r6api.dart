@@ -3,6 +3,14 @@ import '../models/board.dart';
 enum Platform { uplay, psn, xbl }
 enum PlatformAll { uplay, psn, xbl, steam, epic, amazon }
 
+extension PlatformName on Platform {
+  String get name => toString().split('.').last;
+}
+
+extension PlatformAllName on PlatformAll {
+  String get name => toString().split('.').last;
+}
+
 final boards = {
   'pvp_ranked': Board(
     id: 'pvp_ranked',
@@ -38,6 +46,10 @@ const sandboxes = {
 };
 
 enum Region { emea, ncsa, apac }
+
+extension RegionName on Region {
+  String get name => toString().split('.').last;
+}
 
 const regions = {
   Region.emea: 'Europe, Middle East and Africa',
