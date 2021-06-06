@@ -3,6 +3,7 @@ import '../constants/urls.dart';
 import '../constants/api_fields.dart';
 
 class UrlService {
+
   String getAvatar(String id, [int size = 256]) =>
       '$avatars_url/$id/default_${size == 500 ? 'tall' : '${size}_$size'}.png';
 

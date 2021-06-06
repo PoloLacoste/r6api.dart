@@ -1,5 +1,7 @@
 import '../models/board.dart';
 
+const ubiAppId = '3587dcbb-7f81-457c-9781-0e3f29f6f56a';
+
 enum Platform { uplay, psn, xbl }
 enum PlatformAll { uplay, psn, xbl, steam, epic, amazon }
 
