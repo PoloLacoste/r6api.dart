@@ -1,14 +1,4 @@
 class StatusDto {
-  final String appId;
-  final String mdm;
-  final String spaceId;
-  final String category;
-  final String name;
-  final String platform;
-  final String status;
-  final bool maintenance;
-  final List<String> impactedFeatures;
-  
   StatusDto({
     required this.appId,
     required this.mdm,
@@ -20,6 +10,16 @@ class StatusDto {
     required this.maintenance,
     required this.impactedFeatures,
   });
+
+  final String appId;
+  final String mdm;
+  final String spaceId;
+  final String category;
+  final String name;
+  final String platform;
+  final String status;
+  final bool maintenance;
+  final List<String> impactedFeatures;
 
   static const fromMapFactory = _$fromMap;
 

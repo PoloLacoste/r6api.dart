@@ -1,18 +1,4 @@
 class UbiLoginDto {
-  final String platformType;
-  final String ticket;
-  final String profileId;
-  final String userId;
-  final String nameOnPlatform;
-  final String environment;
-  final String expiration;
-  final String spaceId;
-  final String clientIp;
-  final String clientIpCountry;
-  final String serverTime;
-  final String sessionId;
-  final String sessionKey;
-
   UbiLoginDto({
     required this.platformType, 
     required this.ticket,
@@ -28,6 +14,20 @@ class UbiLoginDto {
     required this.sessionId,
     required this.sessionKey,
   });
+
+  final String platformType;
+  final String ticket;
+  final String profileId;
+  final String userId;
+  final String nameOnPlatform;
+  final String environment;
+  final String expiration;
+  final String spaceId;
+  final String clientIp;
+  final String clientIpCountry;
+  final String serverTime;
+  final String sessionId;
+  final String sessionKey;
 
   static const fromMapFactory = _$fromMap;
 

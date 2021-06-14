@@ -14,6 +14,11 @@ class AuthService {
   final _urlService = urlService;
 
   Future<String?> login(String email, String password) async {
+
+    if (_storage.token != null) {
+      return _storage.token;
+    }
+
     final credentials = base64.encode(utf8.encode('$email:$password'));
     final token = 'Basic $credentials';
     try {

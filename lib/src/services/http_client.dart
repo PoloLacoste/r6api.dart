@@ -1,13 +1,28 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 
-import '../models/dtos/ubi_login_dto.dart';
-import '../models/dtos/status_dto.dart';
+import '../models/dtos/dtos.dart';
+import '../models/api_response.dart';
+import '../constants/constants.dart';
 
 typedef MapFactory<BodyType> = BodyType Function(Map<String, dynamic> map);
 
 class HttpClient {
   HttpClient({BaseOptions? options, Iterable<Interceptor>? interceptors}) {
-    _dio = Dio(options)..interceptors.addAll(interceptors ?? []);
+    _dio = Dio(
+      options ??
+          BaseOptions(
+            receiveDataWhenStatusError: true,
+            validateStatus: (status) => status! <= 500,
+          ),
+    )..interceptors.addAll(interceptors ?? [])
+    ..interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        options.headers['Ubi-Appid'] = ubiAppId;
+        return handler.next(options);
+      }
+    ));
   }
 
   late final Dio _dio;
@@ -15,6 +30,8 @@ class HttpClient {
   static final _factories = <Type, MapFactory>{
     UbiLoginDto: UbiLoginDto.fromMapFactory,
     StatusDto: StatusDto.fromMapFactory,
+    ProfileDto: ProfileDto.fromMapFactory,
+    ProfilesDto: ProfilesDto.fromMapFactory,
   };
 
   BodyType? _decodeMap<BodyType>(Map<String, dynamic> values) {
@@ -43,20 +60,20 @@ class HttpClient {
     return entity;
   }
 
-  Response<BodyType> _convertResponse<BodyType, InnerType>(Response res) {
-    return Response<BodyType>(
-      data: _decode<InnerType>(res.data),
-      headers: res.headers,
-      requestOptions: res.requestOptions,
-      isRedirect: res.isRedirect,
-      statusCode: res.statusCode,
-      statusMessage: res.statusMessage,
-      redirects: res.redirects,
-      extra: res.extra,
+  ApiResponse<BodyType> _convertApiResponse<BodyType, InnerType>(Response res) {
+    final data = _decode<InnerType>(res.data);
+    String? error;
+    if (data == null) {
+      error = res.data;
+    }
+    return ApiResponse(
+      data: data,
+      success: res.statusCode == HttpStatus.ok,
+      error: error,
     );
   }
 
-  Future<Response<BodyType>> get<BodyType, InnerType>(
+  Future<ApiResponse<BodyType>> get<BodyType, InnerType>(
     String path, {
     Map<String, dynamic>? queryParameters,
     Options? options,
@@ -71,10 +88,10 @@ class HttpClient {
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _convertResponse<BodyType, InnerType>(res);
+    return _convertApiResponse<BodyType, InnerType>(res);
   }
 
-  Future<Response<BodyType>> post<BodyType, InnerType>(
+  Future<ApiResponse<BodyType>> post<BodyType, InnerType>(
     String path, {
     data,
     Map<String, dynamic>? queryParameters,
@@ -93,10 +110,10 @@ class HttpClient {
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _convertResponse<BodyType, InnerType>(res);
+    return _convertApiResponse<BodyType, InnerType>(res);
   }
 
-  Future<Response<BodyType>> put<BodyType, InnerType>(
+  Future<ApiResponse<BodyType>> put<BodyType, InnerType>(
     String path, {
     data,
     Map<String, dynamic>? queryParameters,
@@ -115,10 +132,10 @@ class HttpClient {
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _convertResponse<BodyType, InnerType>(res);
+    return _convertApiResponse<BodyType, InnerType>(res);
   }
 
-  Future<Response<BodyType>> patch<BodyType, InnerType>(
+  Future<ApiResponse<BodyType>> patch<BodyType, InnerType>(
     String path, {
     data,
     Map<String, dynamic>? queryParameters,
@@ -137,10 +154,10 @@ class HttpClient {
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _convertResponse<BodyType, InnerType>(res);
+    return _convertApiResponse<BodyType, InnerType>(res);
   }
 
-  Future<Response<BodyType>> delete<BodyType, InnerType>(
+  Future<ApiResponse<BodyType>> delete<BodyType, InnerType>(
     String path, {
     data,
     Map<String, dynamic>? queryParameters,
@@ -155,6 +172,6 @@ class HttpClient {
       cancelToken: cancelToken,
     );
 
-    return _convertResponse<BodyType, InnerType>(res);
+    return _convertApiResponse<BodyType, InnerType>(res);
   }
 }
