@@ -13,6 +13,8 @@ extension PlatformAllName on PlatformAll {
   String get name => toString().split('.').last;
 }
 
+const platforms = ['PC', 'PS4', 'XBOXONE', 'PS5', 'XBOX SERIES X'];
+
 final boards = {
   'pvp_ranked': Board(
     id: 'pvp_ranked',
