@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
-import '../constants/constants.dart';
 
 import 'singleton.dart';
+import '../constants/constants.dart';
+import '../models/responses/login.dart';
 
 class AuthService {
   final Dio _client = Dio();
@@ -15,19 +17,21 @@ class AuthService {
     final credentials = base64.encode(utf8.encode('$email:$password'));
     final token = 'Basic $credentials';
     try {
-      final res = await _client.post(
+      final res = await _client.post<LoginResponse>(
         _urlService.getLogin(),
         data: {
-          'rememberMe': true,
+          'rememberMe': false,
         },
         options: Options(
           headers: {
             'Authorization': token,
             'Ubi-AppId': ubiAppId,
           },
+          responseType: ResponseType.json,
         ),
       );
-      return res.data.ticket;
+
+      return res.data?.ticket;
     } catch (e) {
       print(e);
     }
