@@ -1,14 +1,14 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 
 import 'singleton.dart';
+import 'http_client.dart';
 import '../constants/constants.dart';
-import '../models/responses/login.dart';
+import '../models/dtos/ubi_login_dto.dart';
 
 class AuthService {
-  final Dio _client = Dio();
+  final HttpClient _client = HttpClient();
 
   final _storage = storage;
   final _urlService = urlService;
@@ -17,7 +17,7 @@ class AuthService {
     final credentials = base64.encode(utf8.encode('$email:$password'));
     final token = 'Basic $credentials';
     try {
-      final res = await _client.post<LoginResponse>(
+      final res = await _client.post<UbiLoginDto, UbiLoginDto>(
         _urlService.getLogin(),
         data: {
           'rememberMe': false,
@@ -30,8 +30,11 @@ class AuthService {
           responseType: ResponseType.json,
         ),
       );
-
-      return res.data?.ticket;
+      final ticket = res.data?.ticket;
+      if (ticket != null) {
+        _storage.token = ticket;
+      }
+      return ticket;
     } catch (e) {
       print(e);
     }
