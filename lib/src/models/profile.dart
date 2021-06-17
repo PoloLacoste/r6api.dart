@@ -1,6 +1,6 @@
 class Profile {
   Profile({
-    required this.profileId,
+    required this.id,
     required this.userId,
     required this.idOnPlatform,
     required this.platformType,
@@ -8,7 +8,7 @@ class Profile {
     required this.avatars,
   });
   
-  final String profileId;
+  final String id;
   final String userId;
   final String idOnPlatform;
   final String platformType;

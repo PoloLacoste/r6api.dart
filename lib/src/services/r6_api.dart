@@ -44,24 +44,26 @@ class R6Api {
   final String email;
   final String password;
 
-  Future<ProfileDto?> getByUsername(Platform platform, String username) async {
-    final res = await _client.get<ProfilesDto, ProfilesDto>(_urlService.getByUsername(platform, [username]));
+  Future<Profile?> getByUsername(Platform platform, String username) async {
+    final res = await _client.get<ProfilesDto, ProfilesDto>(
+        _urlService.getByUsername(platform, [username]));
     if (res.success && res.data != null) {
       final profiles = res.data?.profiles ?? [];
-      if (profiles.isNotEmpty) {
-        return profiles.first;
-      } 
+      if (profiles.isNotEmpty && profiles.first != null) {
+        return _getProfile(profiles.first!);
+      }
     }
     return null;
   }
 
-  Future<ProfileDto?> getById(Platform platform, String id) async {
-    final res = await _client.get<ProfilesDto, ProfilesDto>(_urlService.getByIdOnPlatform(platform, [id]));
+  Future<Profile?> getById(Platform platform, String id) async {
+    final res = await _client.get<ProfilesDto, ProfilesDto>(
+        _urlService.getByIdOnPlatform(platform, [id]));
     if (res.success && res.data != null) {
       final profiles = res.data?.profiles ?? [];
-      if (profiles.isNotEmpty) {
-        return profiles.first;
-      } 
+      if (profiles.isNotEmpty && profiles.first != null) {
+        return _getProfile(profiles.first!);
+      }
     }
     return null;
   }
@@ -77,5 +79,16 @@ class R6Api {
           .toList();
     }
     return null;
+  }
+
+  Profile _getProfile(ProfileDto profile) {
+    return Profile(
+      id: profile.profileId,
+      userId: profile.userId,
+      idOnPlatform: profile.idOnPlatform,
+      platformType: profile.platformType,
+      nameOnPlatform: profile.nameOnPlatform,
+      avatars: _urlService.getAvatars(profile.userId),
+    );
   }
 }

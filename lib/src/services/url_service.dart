@@ -3,15 +3,14 @@ import '../constants/urls.dart';
 import '../constants/api_fields.dart';
 
 class UrlService {
-
-  String getAvatar(String id, [int size = 256]) =>
+  String _getAvatar(String id, [int size = 256]) =>
       '$avatars_url/$id/default_${size == 500 ? 'tall' : '${size}_$size'}.png';
 
   String getLogin() => _getUbiServicesURL(3, 'profiles/sessions');
 
   String getByUsername(Platform platform, List<String> usernames) =>
-      _getUbiServicesURL(
-          3, 'profiles', 'platformType=${platform.name}&namesOnPlatform=${usernames.join(',')}');
+      _getUbiServicesURL(3, 'profiles',
+          'platformType=${platform.name}&namesOnPlatform=${usernames.join(',')}');
 
   String getByUserId(List<String> ids) =>
       _getUbiServicesURL(3, 'profiles', 'userIds=${ids.join(',')}');
@@ -54,4 +53,10 @@ class UrlService {
           Platform platform, String pathname, String? search) =>
       '$ubiservices_url/v1/spaces/${space_ids[platform]}'
       '/sandboxes/${sandboxes[platform]}/$pathname${search != null ? '?$search' : ''}';
+
+  Map<int, String> getAvatars(String id) => {
+        146: _getAvatar(id, 146),
+        256: _getAvatar(id, 256),
+        500: _getAvatar(id, 500),
+      };
 }
