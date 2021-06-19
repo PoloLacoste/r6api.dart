@@ -60,8 +60,8 @@ class HttpClient {
     return entity;
   }
 
-  ApiResponse<BodyType> _convertApiResponse<BodyType, InnerType>(Response res) {
-    final data = _decode<InnerType>(res.data);
+  ApiResponse<BodyType> _convertApiResponse<BodyType, InnerType>(Response res, [bool noConversion = false]) {
+    final data = noConversion ? res.data : _decode<InnerType>(res.data);
     String? error;
     if (data == null) {
       error = res.data;
@@ -79,6 +79,7 @@ class HttpClient {
     Options? options,
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
+    bool noConversion = false,
   }) async {
     final res = await _dio.get(
       path,
@@ -88,7 +89,7 @@ class HttpClient {
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _convertApiResponse<BodyType, InnerType>(res);
+    return _convertApiResponse<BodyType, InnerType>(res, noConversion);
   }
 
   Future<ApiResponse<BodyType>> post<BodyType, InnerType>(
@@ -99,6 +100,7 @@ class HttpClient {
     CancelToken? cancelToken,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
+    bool noConversion = false,
   }) async {
     final res = await _dio.post(
       path,
@@ -110,7 +112,7 @@ class HttpClient {
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _convertApiResponse<BodyType, InnerType>(res);
+    return _convertApiResponse<BodyType, InnerType>(res, noConversion);
   }
 
   Future<ApiResponse<BodyType>> put<BodyType, InnerType>(
@@ -121,6 +123,7 @@ class HttpClient {
     CancelToken? cancelToken,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
+    bool noConversion = false,
   }) async {
     final res = await _dio.put(
       path,
@@ -132,7 +135,7 @@ class HttpClient {
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _convertApiResponse<BodyType, InnerType>(res);
+    return _convertApiResponse<BodyType, InnerType>(res, noConversion);
   }
 
   Future<ApiResponse<BodyType>> patch<BodyType, InnerType>(
@@ -143,6 +146,7 @@ class HttpClient {
     CancelToken? cancelToken,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
+    bool noConversion = false,
   }) async {
     final res = await _dio.patch(
       path,
@@ -154,7 +158,7 @@ class HttpClient {
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _convertApiResponse<BodyType, InnerType>(res);
+    return _convertApiResponse<BodyType, InnerType>(res, noConversion);
   }
 
   Future<ApiResponse<BodyType>> delete<BodyType, InnerType>(
@@ -163,6 +167,7 @@ class HttpClient {
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
+    bool noConversion = false,
   }) async {
     final res = await _dio.delete(
       path,
@@ -172,6 +177,6 @@ class HttpClient {
       cancelToken: cancelToken,
     );
 
-    return _convertApiResponse<BodyType, InnerType>(res);
+    return _convertApiResponse<BodyType, InnerType>(res, noConversion);
   }
 }
