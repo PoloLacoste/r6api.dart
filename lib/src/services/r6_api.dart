@@ -4,6 +4,7 @@ import 'singleton.dart';
 import 'http_client.dart';
 import 'auth_service.dart';
 import '../models/profile.dart';
+import '../models/playtime.dart';
 import '../models/dtos/dtos.dart';
 import '../constants/constants.dart';
 
@@ -68,6 +69,35 @@ class R6Api {
     return null;
   }
 
+  Future<Playtime?> getPlaytime(Platform platform, String id) async {
+    final res = await _client.get(_urlService.getPlaytime(platform, [id]),
+        noConversion: true);
+    if (res.success && res.data != null) {
+      final data = res.data['results']?[id];
+      if (data != null) {
+        final generalPvp = _statGetter(data, 'general', 'pvp');
+        final rankedPvp = _statGetter(data, 'ranked', 'pvp');
+        final casualPvp = _statGetter(data, 'casual', 'pvp');
+        final customPvp = _statGetter(data, 'custom', 'pvp');
+
+        return Playtime(
+          id: id,
+          pvp: Pvp(
+            general: generalPvp,
+            ranked: rankedPvp,
+            casual: casualPvp,
+            custom: customPvp,
+            other: generalPvp - (rankedPvp + casualPvp - customPvp),
+          ),
+          pve: Pve(
+            general: _statGetter(data, 'general', 'pve'),
+          ),
+        );
+      }
+    }
+    return null;
+  }
+
   Future<List<StatusDto>?> getStatus() async {
     final res =
         await _client.get<List<StatusDto>, StatusDto>(_urlService.getStatus());
@@ -90,5 +120,9 @@ class R6Api {
       nameOnPlatform: profile.nameOnPlatform,
       avatars: _urlService.getAvatars(profile.userId),
     );
+  }
+
+  int _statGetter(dynamic data, String stat, String type) {
+    return data['$stat${type}_timeplayed:infinite'] ?? 0;
   }
 }
