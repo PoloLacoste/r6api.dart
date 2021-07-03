@@ -1,5 +1,5 @@
 name: r6api
-description: Rainbow Six Siege dart api
+description: Dart wrapper around Rainbow Six Siege stats API, inspired by r6api.js
 version: 0.0.1
 homepage: https://github.com/PoloLacoste/r6api.dart
 repository: https://github.com/PoloLacoste/r6api.dart
