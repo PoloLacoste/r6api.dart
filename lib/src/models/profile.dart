@@ -7,7 +7,7 @@ class Profile {
     required this.nameOnPlatform,
     required this.avatars,
   });
-  
+
   final String id;
   final String userId;
   final String idOnPlatform;

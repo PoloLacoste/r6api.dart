@@ -1,6 +1,6 @@
 class UbiLoginDto {
   UbiLoginDto({
-    required this.platformType, 
+    required this.platformType,
     required this.ticket,
     required this.profileId,
     required this.userId,

@@ -4,7 +4,7 @@ class Board {
     required this.name,
     required this.seasonId,
   });
-  
+
   final String id;
   final String name;
   final int seasonId;

@@ -16,13 +16,14 @@ class HttpClient {
             receiveDataWhenStatusError: true,
             validateStatus: (status) => status! <= 500,
           ),
-    )..interceptors.addAll(interceptors ?? [])
-    ..interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        options.headers['Ubi-Appid'] = ubiAppId;
-        return handler.next(options);
-      }
-    ));
+    )
+      ..interceptors.addAll(interceptors ?? [])
+      ..interceptors.add(InterceptorsWrapper(
+        onRequest: (options, handler) {
+          options.headers['Ubi-Appid'] = ubiAppId;
+          return handler.next(options);
+        },
+      ));
   }
 
   late final Dio _dio;
@@ -60,7 +61,8 @@ class HttpClient {
     return entity;
   }
 
-  ApiResponse<BodyType> _convertApiResponse<BodyType, InnerType>(Response res, [bool noConversion = false]) {
+  ApiResponse<BodyType> _convertApiResponse<BodyType, InnerType>(Response res,
+      [bool noConversion = false]) {
     final data = noConversion ? res.data : _decode<InnerType>(res.data);
     String? error;
     if (data == null) {

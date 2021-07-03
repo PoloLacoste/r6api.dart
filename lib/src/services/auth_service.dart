@@ -14,7 +14,6 @@ class AuthService {
   final _urlService = urlService;
 
   Future<String?> login(String email, String password) async {
-
     if (_storage.token != null) {
       return _storage.token;
     }
