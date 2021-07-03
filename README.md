@@ -1,14 +1,35 @@
-# r6api
+<h1 align="center">
+r6api.dart
+</h1>
 
-A new Flutter package project.
+<div align="center">
+<!-- <a href="https://pub.dev/packages/mason"><img src="https://img.shields.io/pub/v/mason.svg" alt="Pub"></a> -->
+<a href="https://github.com/PoloLacoste/r6api.dart/actions"><img src="https://github.com/PoloLacoste/r6api.dart/workflows/r6api.dart/badge.svg" alt="mason"></a>
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
+</div>
 
-## Getting Started
+---
 
-This project is a starting point for a Dart
-[package](https://flutter.dev/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+## 🚧 Requirements
+- [Dart](https://dart.dev/)
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+## Get started
+
+### Add dependency
+
+```yaml
+dependencies:
+  r6api.dart: ^0.0.1
+```
+
+### Import it
+
+```dart
+import 'package:r6api/r6api.dart';
+```
+
+### Use it
+
+```dart
+final api = R6Api(email: 'YOUR-EMAIL', password: 'YOUR-PASSWORD');
+```
