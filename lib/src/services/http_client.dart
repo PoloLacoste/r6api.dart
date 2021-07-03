@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:dio/dio.dart';
 
 import '../models/dtos/dtos.dart';
@@ -70,7 +68,7 @@ class HttpClient {
     }
     return ApiResponse(
       data: data,
-      success: res.statusCode == HttpStatus.ok,
+      success: res.statusCode == 200,
       error: error,
     );
   }
