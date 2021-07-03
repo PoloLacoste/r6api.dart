@@ -1,4 +1,4 @@
-name: mason
+name: r6api.dart
 
 on:
   push:
